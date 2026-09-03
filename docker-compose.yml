@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  tts-api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./reference_voices:/app/reference_voices
+      - ./speaker_embeddings:/app/speaker_embeddings
+      - ./models_cache:/app/models_cache
+      # - .:/app  # Uncomment for hot-reload during dev
+    environment:
+      - WORKERS_PER_CORE=1
+      - LOG_LEVEL=info
+      # Optional: Add NVIDIA GPU config if using XTTS
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
