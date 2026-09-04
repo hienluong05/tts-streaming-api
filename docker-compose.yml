@@ -1,19 +1,20 @@
-version: '3.8'
-
 services:
   tts-api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tts-streaming-api:latest
+    container_name: tts-api
+    restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "9000:8000"
     volumes:
       - ./reference_voices:/app/reference_voices
       - ./speaker_embeddings:/app/speaker_embeddings
       - ./models_cache:/app/models_cache
-      # - .:/app  # Uncomment for hot-reload during dev
     environment:
-      - WORKERS_PER_CORE=1
       - LOG_LEVEL=info
-      # Optional: Add NVIDIA GPU config if using XTTS
+    # ── GPU support (uncomment khi dùng XTTS v2 trên server có NVIDIA GPU) ──
     # deploy:
     #   resources:
     #     reservations:
