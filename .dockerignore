@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitignore
+.env
+*.md
+.pytest_cache/
+models_cache/
+speaker_embeddings/
+reference_voices/
+run_test.py
+tests/
