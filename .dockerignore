@@ -6,8 +6,8 @@ __pycache__/
 .env
 *.md
 .pytest_cache/
-models_cache/
 speaker_embeddings/
 reference_voices/
+hf_cache/
 run_test.py
 tests/

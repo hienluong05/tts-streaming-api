@@ -170,7 +170,16 @@ acronyms_exceptions_vi = {
     "XSMT": "xổ số miền tây",
     "sars-cov":"sát cô vi",
     "covid":"cô vít",
-    "coronavirus": "cô rô na vai rớt"
+    "coronavirus": "cô rô na vai rớt",
+    "AI": "ây ai",
+    "VTV": "vê tê vê",
+    "VTV1": "vê tê vê một",
+    "VTV2": "vê tê vê hai",
+    "VTV3": "vê tê vê ba",
+    "SJC": "ét di xê",
+    "PDF": "pê đê ép",
+    "BMW": "bê em đúp",
+    "VNĐ": "việt nam đồng"
 }
 
 non_uppercase_exceptions = {

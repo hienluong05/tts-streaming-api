@@ -29,15 +29,20 @@ COPY --from=builder /install /usr/local
 # USER appuser
 WORKDIR /app
 
+# ── Pre-download model weights during build (baked into image) ──
+# 1. VieNeu TTS model (~400MB) — avoids HuggingFace download at runtime
+RUN python -c "from vieneu import Vieneu; Vieneu(mode='v3turbo', backend='onnx')"
+
 # Copy application code
 COPY . .
 
 # Create persistent directories
 RUN mkdir -p reference_voices speaker_embeddings models_cache
 
-# Pre-download TTS model weights during build (bakes into image, ~400MB)
-# Uncomment the line below to avoid downloading on first request:
-# RUN python -c "from vieneu import Vieneu; Vieneu(mode='v3turbo', backend='onnx')"
+# 2. FastText language-detection model (~131MB) — the lid.176.bin file
+#    is COPY'd from models_cache/ (ensure .dockerignore does NOT exclude it).
+#    If it's missing from your local tree, download it first:
+#      python -c "import urllib.request; urllib.request.urlretrieve('https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin', 'models_cache/lid.176.bin')"
 
 EXPOSE 8000
 

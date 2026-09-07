@@ -3,15 +3,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     image: tts-streaming-api:latest
     container_name: tts-api
     restart: unless-stopped
     ports:
       - "9000:8000"
     volumes:
+      - .:/app
       - ./reference_voices:/app/reference_voices
       - ./speaker_embeddings:/app/speaker_embeddings
-      - ./models_cache:/app/models_cache
     environment:
       - LOG_LEVEL=info
     # ── GPU support (uncomment khi dùng XTTS v2 trên server có NVIDIA GPU) ──
