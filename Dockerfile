@@ -33,6 +33,10 @@ WORKDIR /app
 # 1. VieNeu TTS model (~400MB) — avoids HuggingFace download at runtime
 RUN python -c "from vieneu import Vieneu; Vieneu(mode='v3turbo', backend='onnx')"
 
+# 2. XTTS model — downloaded to an external path to avoid being masked by volume mounts
+RUN pip install huggingface_hub && \
+    python -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='capleaf/viXTTS', local_dir='/models/viXTTS', local_dir_use_symlinks=False)"
+
 # Copy application code
 COPY . .
 

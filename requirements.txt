@@ -6,8 +6,8 @@ pydantic-settings>=2.0.0
 
 # TTS Models
 vieneu>=2.4.0
-# TTS>=0.22.0 # Uncomment when adding XTTS fallback
-
+TTS>=0.22.0 # Uncomment when adding XTTS fallback
+num2words>=0.5.14 # Added for English numbers/money to text
 # Language Detection
 fasttext-wheel>=0.9.2
 

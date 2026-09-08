@@ -8,7 +8,7 @@ from app.api.schemas import (
 )
 from app.models.model_manager import model_manager
 from app.services.language_detector import FastTextLanguageDetector
-from app.services.text_normalizer import VietnameseTextNormalizer
+from app.services.text_normalizer import BilingualTextNormalizer
 from app.services.sentence_splitter import HierarchicalSentenceSplitter
 from app.utils.audio import numpy_to_wav_bytes, create_wav_header, numpy_to_pcm16_bytes
 from app.config import settings
@@ -17,7 +17,7 @@ router = APIRouter()
 
 # Initialize services
 language_detector = FastTextLanguageDetector()
-text_normalizer = VietnameseTextNormalizer(phoneticize_loanwords=False)
+text_normalizer = BilingualTextNormalizer(phoneticize_loanwords=False)
 sentence_splitter = HierarchicalSentenceSplitter(min_chars=40, target_chars=120, max_chars=160)
 
 # Initialize models
@@ -29,8 +29,8 @@ def _preprocess(text: str, language: str = None):
     lang = language
     if not lang:
         lang, _ = language_detector.detect(text)
-    if lang == "vi":
-        text = text_normalizer.normalize(text)
+    
+    text = text_normalizer.normalize(text, lang)
     return text, lang
 
 

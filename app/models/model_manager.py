@@ -21,7 +21,17 @@ class ModelManager:
         
         # Initialize fallback model (XTTS) if configured
         if settings.use_xtts_fallback:
-            self.fallback_model = XTTSModel()
+            import os
+            xtts_dir = "/models/viXTTS"
+            if not os.path.exists(xtts_dir):
+                xtts_dir = os.path.join(os.getcwd(), settings.models_cache_dir, "viXTTS")
+            
+            config_path = os.path.join(xtts_dir, "config.json")
+            if os.path.exists(config_path):
+                self.fallback_model = XTTSModel(config_path=config_path, checkpoint_dir=xtts_dir)
+            else:
+                logger.warning(f"XTTS cache not found at {xtts_dir}. Initializing dummy XTTSModel.")
+                self.fallback_model = XTTSModel()
         else:
             logger.info("XTTS fallback is disabled in settings.")
 
