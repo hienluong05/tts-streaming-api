@@ -168,18 +168,72 @@ acronyms_exceptions_vi = {
     "XSMB": "xổ số miền bắc",
     "XSMN": "xổ số miền nam",
     "XSMT": "xổ số miền tây",
-    "sars-cov":"sát cô vi",
-    "covid":"cô vít",
+    "sars-cov": "sát cô vi",
+    "covid": "cô vít",
     "coronavirus": "cô rô na vai rớt",
     "AI": "ây ai",
     "VTV": "vê tê vê",
-    "VTV1": "vê tê vê một",
-    "VTV2": "vê tê vê hai",
-    "VTV3": "vê tê vê ba",
+    "VTV1": "vê tê vê - một",
+    "VTV2": "vê tê vê - hai",
+    "VTV3": "vê tê vê - ba",
     "SJC": "ét di xê",
-    "PDF": "pê đê ép",
-    "BMW": "bê em đúp",
-    "VNĐ": "việt nam đồng"
+    "PDF": "pi đi ép",
+    "BMW": "bi em vi",
+    "VNĐ": "việt nam đồng",
+    # Banking Acronyms
+    "KH": "khách hàng",
+    "CCCD": "căn cước công dân",
+    "CMND": "chứng minh nhân dân",
+    "CMT": "chứng minh thư",
+    "HC": "hộ chiếu",
+    "MST": "mã số thuế",
+    "ĐKKD": "đăng ký kinh doanh",
+    "SĐT": "số điện thoại",
+    "ĐC": "địa chỉ",
+    "NS": "ngày sinh",
+    "STK": "số tài khoản",
+    "TKTT": "tài khoản thanh toán",
+    "TKTK": "tài khoản tiết kiệm",
+    "TK": "tài khoản",
+    "SD": "số dư",
+    "SDTT": "số dư thực tế",
+    "SDKD": "số dư khả dụng",
+    "LS": "lãi suất",
+    "LSTK": "lãi suất tiết kiệm",
+    "BHTG": "bảo hiểm tiền gửi",
+    "TD": "tín dụng",
+    "TTD": "thẻ tín dụng",
+    "HMTD": "hạn mức tín dụng",
+    "HM": "hạn mức",
+    "HDTD": "hợp đồng tín dụng",
+    "HĐ": "hợp đồng",
+    "TSBĐ": "tài sản bảo đảm",
+    "TSĐB": "tài sản đảm bảo",
+    "NQH": "nợ quá hạn",
+    "QH": "quá hạn",
+    "TC": "tín chấp",
+    "DNT": "dư nợ tháng",
+    "DNTT": "dư nợ tối thiểu",
+    "CIC": "xi ai xi",
+    "GD": "giao dịch",
+    "GDKH": "giao dịch khách hàng",
+    "CK": "chuyển khoản",
+    "TT": "thanh toán",
+    "UNC": "ủy nhiệm chi",
+    "UNT": "ủy nhiệm thu",
+    "TB": "thông báo",
+    "TBBĐ": "thông báo biến động",
+    "DSGD": "doanh số giao dịch",
+    "VAT": "vát",
+    "NH": "ngân hàng",
+    "NHNN": "ngân hàng nhà nước",
+    "NHTM": "ngân hàng thương mại",
+    "CN": "chi nhánh",
+    "PGD": "phòng giao dịch",
+    "SGD": "sở giao dịch",
+    "KBNN": "kho bạc nhà nước",
+    "NV": "nhân viên",
+    "NVKD": "nhân viên kinh doanh",
 }
 
 non_uppercase_exceptions = {
@@ -233,6 +287,23 @@ def expand_acronyms(m):
 
 
 def expand_acronyms_vi(text):
+    # Xử lý ngữ cảnh đa nghĩa (vd: STK = Sổ tiết kiệm khi đi kèm từ khóa)
+    text = re.sub(r"(?i)\b(mở\s+)STK\b", r"\1sổ tiết kiệm", text)
+    text = re.sub(r"(?i)\bSTK(\s+kỳ\s+hạn)\b", r"sổ tiết kiệm\1", text)
+
+    # Xử lý tên ngân hàng (tránh lặp từ "ngân hàng")
+    bank_mapping = {
+        r"VCB": "Vietcombank",
+        r"TCB": "Techcombank",
+        r"CTG|Vietin": "VietinBank",
+        r"BID|BIDV": "BIDV",
+        r"MB|MBB": "Quân đội",
+        r"VPB|VPBank": "VPBank",
+        r"ACB": "ACB",
+    }
+    for pattern, name in bank_mapping.items():
+        text = re.sub(r"(?i)\b(?:ngân\s+hàng\s+|nh\s+)?(" + pattern + r")\b", "ngân hàng " + name, text)
+
     for k, v in acronyms_exceptions_vi.items():
         text = re.sub(r"\b" + k + r"\b", v, text, flags=re.IGNORECASE)
     return text
